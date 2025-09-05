@@ -13,17 +13,10 @@ async function load(): Promise<any[]> {
   } catch { return []; }
 }
 
-export async function GET() {
-  const items = await load();
-  return NextResponse.json(items);
-}
-
 export async function POST(req: Request) {
-  const auth = (req.headers.get("authorization")||"").replace("Bearer ","");
-  if (auth !== process.env.SHOWYO_INTERNAL_API_KEY) return NextResponse.json({error:"unauthorized"},{status:401});
-  const body = await req.json();
-  const items = await load();
-  items.push(body);
+  const { id } = await req.json() as { id:string };
+  if (!id) return NextResponse.json({error:"missing id"},{status:400});
+  const items = (await load()).filter(i => i.id !== id);
   await s3.send(new PutObjectCommand({ Bucket, Key: KEY, Body: JSON.stringify(items), ContentType: "application/json" }));
   return NextResponse.json({ ok:true });
 }
