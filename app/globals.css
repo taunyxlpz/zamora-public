@@ -1,0 +1,5 @@
+:root{--bg:#0b0b0d;--fg:#ededed}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+a{color:inherit;text-decoration:none}
+*{box-sizing:border-box}
