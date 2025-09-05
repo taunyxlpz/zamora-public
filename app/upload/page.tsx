@@ -1,7 +1,4 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
 "use client";
-
 import { useSearchParams } from "next/navigation";
 
 export default function UploadHandoff() {
