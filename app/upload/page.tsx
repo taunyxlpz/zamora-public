@@ -1,6 +1,6 @@
+﻿"use client";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -30,12 +30,12 @@ export default function UploadPage() {
 
   const accept = useMemo(() => kind==="photo" ? "image/*" : "video/*", [kind]);
 
-  if (paid === null) return <div style={{display:"grid",placeItems:"center",height:"70dvh"}}>Checking payment…</div>;
+  if (paid === null) return <div style={{display:"grid",placeItems:"center",height:"70dvh"}}>Checking paymentâ€¦</div>;
   if (paid === false) return <div style={{display:"grid",placeItems:"center",height:"70dvh"}}>Payment not found. <button onClick={()=>router.push("/")}>Go back</button></div>;
 
   async function onUpload() {
     if (!file || !kind) return;
-    setStatus("Requesting upload url…");
+    setStatus("Requesting upload urlâ€¦");
     const key = `${kind}/${uid()}-${file.name.replace(/\s+/g,"-")}`;
     const pre = await fetch("/api/upload/presign", {
       method: "POST", headers:{"content-type":"application/json"},
@@ -47,11 +47,11 @@ export default function UploadPage() {
     form.append("Content-Type", file.type);
     form.append("file", file);
 
-    setStatus("Uploading to S3…");
+    setStatus("Uploading to S3â€¦");
     const up = await fetch(pre.url, { method:"POST", body: form });
     if (up.status !== 204) { setStatus("Upload failed"); return; }
 
-    setStatus("Moderating…");
+    setStatus("Moderatingâ€¦");
     const mod = await fetch("/api/moderate", {
       method: "POST", headers:{ "content-type":"application/json" },
       body: JSON.stringify({ objectKey: pre.objectKey, targetKey: key })
@@ -64,7 +64,7 @@ export default function UploadPage() {
     const end = new Date(now.getTime() + 2*60*60*1000).toISOString(); // safety window
     const duration = 10; // seconds
 
-    setStatus("Adding to playlist…");
+    setStatus("Adding to playlistâ€¦");
     await fetch("/api/playlist", {
       method: "POST",
       headers: {
